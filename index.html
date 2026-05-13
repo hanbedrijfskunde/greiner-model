@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Greiner's Growth Model: Evolution & Current Status</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Chosen Palette: Warm Neutrals with Teal Accents. Backgrounds: stone-50, stone-100. Text: stone-800, stone-600. Accents: teal-600 (primary interactive), amber-600 (warnings/crises). -->
+    
+    <!-- Application Structure Plan: 
+    1. Header/Hero: Establishes context and introduces the subject.
+    2. Interactive Model Explorer: A horizontal timeline (HTML/Tailwind) acting as a selector, updating a detailed display panel below it. This allows users to explore the 6 phases non-linearly.
+    3. The Growth Curve (Visualization): A Chart.js line graph plotting Age vs. Size, visually representing the evolutionary and revolutionary periods.
+    4. Current Scientific Status (Grid): A comparative grid highlighting the 1972 original model vs. modern scientific critiques (Linearity, Digital Transformation, Network effects).
+    Rationale: This structure moves from foundational understanding (interactive explorer) to macro-visualization (chart), ending with high-level academic critique, ensuring a logical flow of learning.
+    -->
+    
+    <!-- Visualization & Content Choices: 
+    - Goal: Understand specific phases -> Method: Interactive HTML/CSS Timeline + Detail Panel -> Interaction: Click to reveal -> Justification: Breaks dense text into digestible, user-controlled chunks -> Method: Vanilla JS DOM manipulation (NO SVG).
+    - Goal: Visualize the overall trajectory -> Method: Line Chart -> Interaction: Hover for tooltips, highlights active phase -> Justification: Replicates the classic Greiner curve interactively -> Library: Chart.js Canvas.
+    - Goal: Compare historical vs modern academic views -> Method: CSS Grid comparison cards -> Interaction: Hover effects for focus -> Justification: Direct juxtaposition aids analytical understanding.
+    -->
+    
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fafaf9; /* stone-50 */
+            color: #292524; /* stone-800 */
+        }
+
+        .chart-container { 
+            position: relative; 
+            width: 100%; 
+            max-width: 800px; 
+            margin-left: auto; 
+            margin-right: auto; 
+            height: 350px; 
+            max-height: 450px; 
+        } 
+        
+        @media (min-width: 768px) { 
+            .chart-container { 
+                height: 400px; 
+            } 
+        }
+
+        .phase-btn.active {
+            background-color: #0d9488; /* teal-600 */
+            color: white;
+            border-color: #0d9488;
+        }
+        
+        .crisis-text {
+            color: #d97706; /* amber-600 */
+        }
+    </style>
+</head>
+<body class="antialiased pb-20">
+
+    <!-- Header Section -->
+    <header class="bg-stone-900 text-stone-50 py-16 px-6 md:px-12 shadow-md">
+        <div class="max-w-5xl mx-auto">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4 tracking-tight">Greiner's Growth Model</h1>
+            <p class="text-xl md:text-2xl font-light text-stone-300 max-w-3xl">
+                Tracing the evolution of organizational growth theory from 1972 to present-day network paradigms.
+            </p>
+        </div>
+    </header>
+
+    <!-- Navigation / Sticky Tabs -->
+    <nav class="sticky top-0 bg-white/90 backdrop-blur border-b border-stone-200 z-50">
+        <div class="max-w-5xl mx-auto px-6 flex space-x-6 overflow-x-auto">
+            <a href="#interactive-model" class="py-4 text-sm font-semibold text-stone-600 hover:text-teal-600 whitespace-nowrap transition">The Model</a>
+            <a href="#growth-curve" class="py-4 text-sm font-semibold text-stone-600 hover:text-teal-600 whitespace-nowrap transition">The Growth Curve</a>
+            <a href="#scientific-status" class="py-4 text-sm font-semibold text-stone-600 hover:text-teal-600 whitespace-nowrap transition">Current Scientific Status</a>
+        </div>
+    </nav>
+
+    <main class="max-w-5xl mx-auto px-6 mt-12 space-y-24">
+
+        <!-- Section 1: The Interactive Model -->
+        <section id="interactive-model" class="scroll-mt-24">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold mb-4">The Six Phases of Growth</h2>
+                <p class="text-stone-600 leading-relaxed text-lg">
+                    Larry E. Greiner initially proposed five phases of growth in 1972, later adding a sixth in 1998. The core premise is that the very management practices that drive success in one phase eventually cause a crisis, necessitating a revolution to enter the next phase. Explore the phases below.
+                </p>
+            </div>
+
+            <!-- Interactive Timeline -->
+            <div class="bg-white rounded-xl shadow-sm border border-stone-200 p-6 md:p-8">
+                <div class="flex flex-wrap gap-2 mb-8 justify-between relative">
+                    <!-- Buttons will be generated by JS -->
+                    <div id="timeline-buttons" class="flex flex-wrap gap-2 w-full justify-between"></div>
+                </div>
+
+                <!-- Detail Panel -->
+                <div id="phase-details" class="grid md:grid-cols-2 gap-8 bg-stone-50 p-6 md:p-8 rounded-lg border border-stone-200 transition-all">
+                    <div>
+                        <div class="inline-block px-3 py-1 rounded-full text-xs font-bold tracking-wide uppercase bg-teal-100 text-teal-800 mb-4" id="detail-badge">Phase 1</div>
+                        <h3 class="text-2xl font-bold mb-2" id="detail-title">Growth through Creativity</h3>
+                        <p class="text-stone-600 mb-6" id="detail-desc">Initial phase dominated by the founders, focusing on creating both a product and a market. Communication is frequent and informal.</p>
+                        
+                        <div class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r">
+                            <h4 class="font-bold text-amber-800 text-sm uppercase mb-1">Resulting Crisis</h4>
+                            <p class="text-amber-900" id="detail-crisis">Crisis of Leadership: Informal management fails as the company grows. Founders struggle with manufacturing and financial scaling.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div class="bg-white p-4 rounded shadow-sm border border-stone-100">
+                            <h4 class="text-xs font-bold uppercase text-stone-400 mb-1">Management Focus</h4>
+                            <p class="font-medium" id="detail-focus">Make & Sell</p>
+                        </div>
+                        <div class="bg-white p-4 rounded shadow-sm border border-stone-100">
+                            <h4 class="text-xs font-bold uppercase text-stone-400 mb-1">Organizational Structure</h4>
+                            <p class="font-medium" id="detail-org">Informal</p>
+                        </div>
+                        <div class="bg-white p-4 rounded shadow-sm border border-stone-100">
+                            <h4 class="text-xs font-bold uppercase text-stone-400 mb-1">Top Management Style</h4>
+                            <p class="font-medium" id="detail-style">Individualistic & Entrepreneurial</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: The Growth Curve -->
+        <section id="growth-curve" class="scroll-mt-24">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold mb-4">Visualizing Evolutionary and Revolutionary Phases</h2>
+                <p class="text-stone-600 leading-relaxed text-lg">
+                    The model plots organizational size against organizational age. The prolonged periods of steady growth (Evolution) are interspersed with volatile periods of systemic change (Revolution/Crisis).
+                </p>
+            </div>
+
+            <div class="bg-white p-6 border border-stone-200 rounded-xl shadow-sm">
+                <div class="chart-container">
+                    <canvas id="greinerChart"></canvas>
+                </div>
+                <div class="mt-6 text-sm text-stone-500 text-center flex justify-center items-center gap-6">
+                    <span class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-teal-500 inline-block"></span> Evolutionary Growth</span>
+                    <span class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-amber-500 inline-block"></span> Revolutionary Crisis</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Current Scientific Status -->
+        <section id="scientific-status" class="scroll-mt-24">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold mb-4">Current Scientific Status & Criticisms</h2>
+                <p class="text-stone-600 leading-relaxed text-lg">
+                    While Greiner's model remains a staple in MBA programs for its heuristic value, modern organizational science has heavily scrutinized and expanded upon it. Today's dynamic, digitally-driven ecosystems challenge the model's strict linearity.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Card 1 -->
+                <div class="bg-white border border-stone-200 p-6 rounded-xl hover:shadow-md transition">
+                    <div class="w-10 h-10 bg-teal-100 text-teal-700 rounded-lg flex items-center justify-center mb-4 text-xl font-bold">1</div>
+                    <h3 class="text-lg font-bold mb-2">The Linearity Critique</h3>
+                    <p class="text-stone-600 text-sm">
+                        Historically, growth was viewed as sequential. <strong>Current research</strong> (e.g., studying tech startups and "Blitzscaling") shows organizations often skip phases entirely or experience multiple crises simultaneously due to hyper-growth.
+                    </p>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="bg-white border border-stone-200 p-6 rounded-xl hover:shadow-md transition">
+                    <div class="w-10 h-10 bg-teal-100 text-teal-700 rounded-lg flex items-center justify-center mb-4 text-xl font-bold">2</div>
+                    <h3 class="text-lg font-bold mb-2">Rise of Agile & Networks</h3>
+                    <p class="text-stone-600 text-sm">
+                        Greiner's model assumes structural hierarchy. Modern management theory emphasizes <strong>Agile methodologies and holacracy</strong>, where the "Crisis of Control" is preempted by decentralized, autonomous teams operating with high alignment.
+                    </p>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="bg-white border border-stone-200 p-6 rounded-xl hover:shadow-md transition">
+                    <div class="w-10 h-10 bg-teal-100 text-teal-700 rounded-lg flex items-center justify-center mb-4 text-xl font-bold">3</div>
+                    <h3 class="text-lg font-bold mb-2">The Ecosystem Expansion</h3>
+                    <p class="text-stone-600 text-sm">
+                        The 1998 addition of "Phase 6: Alliances" has become the focal point of current research. Growth is no longer bounded by the firm's walls, but relies on <strong>open innovation, platforms, and external ecosystem integration</strong>.
+                    </p>
+                </div>
+            </div>
+
+            <div class="mt-12 p-8 bg-stone-900 text-stone-100 rounded-xl">
+                <h3 class="text-2xl font-bold mb-4">Summary of Current Consensus</h3>
+                <p class="text-stone-300 leading-relaxed">
+                    Greiner’s underlying philosophy—that <span class="text-teal-400 font-semibold">"the solutions to today's problems become the causes of tomorrow's crises"</span>—remains scientifically robust and universally applicable. However, the specific structural prescriptions (Phases 1-5) are now viewed as highly dependent on industry context, technological leverage, and macroeconomic conditions rather than inevitable laws of physics.
+                </p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // Data Storage for Phases
+        const phaseData = [
+            {
+                id: 1,
+                name: "Creativity",
+                desc: "Initial phase dominated by the founders, focusing on creating both a product and a market. Communication is frequent and informal.",
+                crisis: "Crisis of Leadership: Informal management fails as the company grows. Founders struggle with manufacturing and financial scaling.",
+                focus: "Make & Sell",
+                org: "Informal",
+                style: "Individualistic & Entrepreneurial"
+            },
+            {
+                id: 2,
+                name: "Direction",
+                desc: "Capable business managers are brought in. Functional organizational structures are introduced, along with accounting systems and capital management.",
+                crisis: "Crisis of Autonomy: Lower-level managers find themselves restricted by centralized hierarchy and demand more freedom to respond to markets.",
+                focus: "Efficiency of Operations",
+                org: "Centralized & Functional",
+                style: "Directive"
+            },
+            {
+                id: 3,
+                name: "Delegation",
+                desc: "Decentralized organizational structure. Plant managers or territory managers are given greater responsibility to respond to specific markets.",
+                crisis: "Crisis of Control: Top management feels they are losing control over a highly diversified field operation. Parochialism takes over.",
+                focus: "Expansion of Market",
+                org: "Decentralized & Geographical",
+                style: "Delegative"
+            },
+            {
+                id: 4,
+                name: "Coordination",
+                desc: "Formal systems are established to achieve greater coordination. Product groups are merged, and formal planning procedures are initiated.",
+                crisis: "Crisis of Red Tape: A proliferation of systems and programs begins to exceed its utility. The organization becomes too large to be managed purely by formal programs.",
+                focus: "Consolidation of Organization",
+                org: "Line-Staff & Product Groups",
+                style: "Watchdog"
+            },
+            {
+                id: 5,
+                name: "Collaboration",
+                desc: "Emphasis shifts to problem-solving through team action. Matrix structures are formed, and social control/discipline replaces formal control.",
+                crisis: "Crisis of Internal Exhaustion: Employees become emotionally and physically exhausted by the intensity of teamwork and constant innovation pressure.",
+                focus: "Problem Solving & Innovation",
+                org: "Matrix of Teams",
+                style: "Participative"
+            },
+            {
+                id: 6,
+                name: "Alliances",
+                desc: "(Added 1998) Growth relies on extra-organizational solutions: mergers, acquisitions, networks, and alliances to overcome the limits of internal growth.",
+                crisis: "Crisis of Identity / Ecosystem: Loss of distinct corporate culture, misalignment with partners, or over-reliance on external networks.",
+                focus: "Network & Ecosystem Management",
+                org: "Network / Ecosystem",
+                style: "Collaborative & Diplomatic"
+            }
+        ];
+
+        // Core Interaction Handling: Populate Timeline
+        const timelineContainer = document.getElementById('timeline-buttons');
+        let currentActivePhase = 1;
+
+        function initTimeline() {
+            phaseData.forEach((phase, index) => {
+                const btn = document.createElement('button');
+                btn.className = `phase-btn flex-1 min-w-[120px] py-3 px-4 border border-stone-300 rounded text-sm font-semibold transition-colors focus:outline-none ${index === 0 ? 'active' : 'text-stone-600 bg-white hover:bg-stone-50'}`;
+                btn.innerHTML = `Phase ${phase.id}<br><span class="font-normal text-xs opacity-80">${phase.name}</span>`;
+                
+                btn.addEventListener('click', () => {
+                    updatePhaseDisplay(phase.id);
+                    
+                    // Update button styling
+                    document.querySelectorAll('.phase-btn').forEach(b => {
+                        b.classList.remove('active', 'bg-teal-600', 'text-white');
+                        b.classList.add('text-stone-600', 'bg-white');
+                        b.style.backgroundColor = '';
+                        b.style.color = '';
+                    });
+                    btn.classList.add('active');
+                    btn.classList.remove('text-stone-600', 'bg-white');
+                    
+                    // Highlight Chart Point
+                    updateChartHighlight(phase.id - 1);
+                });
+                
+                timelineContainer.appendChild(btn);
+            });
+        }
+
+        // State Management: Update UI text
+        function updatePhaseDisplay(phaseId) {
+            const data = phaseData.find(p => p.id === phaseId);
+            if(!data) return;
+
+            document.getElementById('detail-badge').innerText = `Phase ${data.id}`;
+            document.getElementById('detail-title').innerText = `Growth through ${data.name}`;
+            document.getElementById('detail-desc').innerText = data.desc;
+            document.getElementById('detail-crisis').innerText = data.crisis;
+            document.getElementById('detail-focus').innerText = data.focus;
+            document.getElementById('detail-org').innerText = data.org;
+            document.getElementById('detail-style').innerText = data.style;
+        }
+
+        // Chart.js Implementation
+        let greinerChart;
+        
+        function initChart() {
+            const ctx = document.getElementById('greinerChart').getContext('2d');
+            
+            // X: Age, Y: Size. Generating data points to simulate the staircase
+            const dataPoints = [
+                {x: 0, y: 0},
+                {x: 10, y: 15}, // Phase 1 Growth
+                {x: 12, y: 13}, // Crisis 1
+                {x: 25, y: 35}, // Phase 2 Growth
+                {x: 27, y: 32}, // Crisis 2
+                {x: 40, y: 60}, // Phase 3 Growth
+                {x: 42, y: 55}, // Crisis 3
+                {x: 55, y: 80}, // Phase 4 Growth
+                {x: 57, y: 75}, // Crisis 4
+                {x: 70, y: 95}, // Phase 5 Growth
+                {x: 72, y: 90}, // Crisis 5
+                {x: 85, y: 110} // Phase 6 Growth
+            ];
+
+            // Map data to highlight specific points
+            const pointBackgroundColors = dataPoints.map((pt, i) => {
+                if (i === 0) return 'transparent';
+                if (i % 2 === 0) return '#f59e0b'; // Crisis point (amber-500)
+                return '#14b8a6'; // Growth point (teal-500)
+            });
+
+            const pointRadii = dataPoints.map((pt, i) => {
+                if (i === 0) return 0;
+                return 6;
+            });
+
+            greinerChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    datasets: [{
+                        label: 'Organizational Evolution',
+                        data: dataPoints,
+                        borderColor: '#0f766e', // teal-700
+                        borderWidth: 3,
+                        tension: 0.3, // slight curve
+                        pointBackgroundColor: pointBackgroundColors,
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2,
+                        pointRadius: pointRadii,
+                        pointHoverRadius: 8,
+                        fill: true,
+                        backgroundColor: 'rgba(20, 184, 166, 0.05)' // very light teal
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const index = context.dataIndex;
+                                    if (index === 0) return '';
+                                    
+                                    const isCrisis = index % 2 === 0;
+                                    const phaseNum = Math.ceil(index / 2);
+                                    
+                                    if (isCrisis) {
+                                        return `Crisis ${phaseNum - 1}: ${phaseData[phaseNum-2]?.crisis.split(':')[0] || 'Exhaustion'}`;
+                                    } else {
+                                        return `Phase ${phaseNum}: Growth through ${phaseData[phaseNum-1]?.name}`;
+                                    }
+                                }
+                            },
+                            backgroundColor: 'rgba(28, 25, 23, 0.9)', // stone-900
+                            titleFont: { family: 'Inter', size: 13 },
+                            bodyFont: { family: 'Inter', size: 14, weight: 'bold' },
+                            padding: 12,
+                            displayColors: false
+                        }
+                    },
+                    scales: {
+                        x: {
+                            type: 'linear',
+                            title: { display: true, text: 'Age of Organization (Young to Mature)', font: { weight: 'bold', family: 'Inter' } },
+                            ticks: { display: false }, // Hide numerical ticks to keep it conceptual
+                            grid: { display: false }
+                        },
+                        y: {
+                            title: { display: true, text: 'Size of Organization (Small to Large)', font: { weight: 'bold', family: 'Inter' } },
+                            ticks: { display: false },
+                            grid: { color: '#f5f5f4' } // stone-100
+                        }
+                    },
+                    interaction: {
+                        mode: 'nearest',
+                        intersect: true,
+                        axis: 'x'
+                    }
+                }
+            });
+        }
+
+        // Highlight specific data point when timeline button clicked
+        function updateChartHighlight(phaseIndex) {
+            if(!greinerChart) return;
+            
+            const dataIndex = (phaseIndex * 2) + 1; // Maps 0->1, 1->3, 2->5 etc. (The growth points)
+            
+            const newRadii = greinerChart.data.datasets[0].data.map((_, i) => {
+                if (i === 0) return 0;
+                if (i === dataIndex || i === dataIndex + 1) return 10; // Highlight growth and subsequent crisis
+                return 4;
+            });
+            
+            greinerChart.data.datasets[0].pointRadius = newRadii;
+            greinerChart.update();
+        }
+
+        // Initialize application
+        document.addEventListener('DOMContentLoaded', () => {
+            initTimeline();
+            updatePhaseDisplay(1);
+            initChart();
+            setTimeout(() => updateChartHighlight(0), 500); // Highlight first phase on load
+        });
+
+    </script>
+</body>
+</html>
