@@ -39,6 +39,14 @@ Samen vertellen deze zeven video's één doorlopend verhaal over de levenscyclus
 
 De rode draad — door alle zeven heen — is een dubbele beweging: AI fungeert als de externe schok die elke fase forceert tot herontwerp, en *distributed leadership* + *curiosity* zijn de interne mechaniek waarmee organisaties die fasen telkens opnieuw kunnen doorlopen zonder zichzelf te verliezen. Met andere woorden: Greiner's groeicurve is geen ladder die je beklimt, maar een patroon dat zich herhaalt — en de bedrijven die dat begrijpen, bouwen die hercyclering al ván begin af aan in plaats van er pas op te reageren als de crisis er staat.
 
+
+
+Hierboven zie je de zeven video's elk op hun eigen fase van de Greiner-curve. De stippellijn-achtige stapjes tussen de fasen zijn de crises die Greiner identificeert — leiderschap → autonomie → controle → red tape → renewal — en elke video laat zien hoe een organisatie ofwel ín die crisis vastloopt, ofwel er bewust uit ontsnapt.
+
+Wat opvalt als je het zo ziet: drie van de zeven video's clusteren in fase 5 en 6, en dat is ook precies waar het meeste transformatieadvies in 2026 zich op richt — grote, gevestigde organisaties die hun coordinatie- en aristocratie-reflexen moeten afleren om in de AI-eeuw relevant te blijven. De videos #1 (Ries) en #7 (Argenx) zijn de tegenhanger: zij laten zien dat je het patroon van crises kunt vóórzijn als je vanaf het begin ontwerpt voor leren en zelfsturing, in plaats van dat pas in te bouwen wanneer de organisatie er al onder lijdt.
+
+Wil je dat ik dit overzicht ook als PNG of PDF wegzet zodat je het in een presentatie of handout kunt gebruiken? Of een variant maken waarin per fase een korte didactische vraag staat voor studenten?
+
 Sources:
 - [Eric Ries — How to build a company that withstands any era](https://www.youtube.com/watch?v=PoJ1vTdHpks)
 - [Karen Massey (Argenx) — Leaders at All Levels](https://www.youtube.com/watch?v=eqpSydz-yao)
