@@ -39,7 +39,7 @@ Samen vertellen deze zeven video's één doorlopend verhaal over de levenscyclus
 
 De rode draad — door alle zeven heen — is een dubbele beweging: AI fungeert als de externe schok die elke fase forceert tot herontwerp, en *distributed leadership* + *curiosity* zijn de interne mechaniek waarmee organisaties die fasen telkens opnieuw kunnen doorlopen zonder zichzelf te verliezen. Met andere woorden: Greiner's groeicurve is geen ladder die je beklimt, maar een patroon dat zich herhaalt — en de bedrijven die dat begrijpen, bouwen die hercyclering al ván begin af aan in plaats van er pas op te reageren als de crisis er staat.
 
-
+![Greiner model met videos](path/to/your/file.svg)
 
 Hierboven zie je de zeven video's elk op hun eigen fase van de Greiner-curve. De stippellijn-achtige stapjes tussen de fasen zijn de crises die Greiner identificeert — leiderschap → autonomie → controle → red tape → renewal — en elke video laat zien hoe een organisatie ofwel ín die crisis vastloopt, ofwel er bewust uit ontsnapt.
 
